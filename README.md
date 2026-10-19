@@ -12,7 +12,6 @@ This repository contains the coursework and continuous assessment implementation
 ```text
 MIT-8103--Advanced-Database-CA/
 ├── README.md
-└── (coursework files and scripts to be added)
 ```
 
 ## Setup & Prerequisites
