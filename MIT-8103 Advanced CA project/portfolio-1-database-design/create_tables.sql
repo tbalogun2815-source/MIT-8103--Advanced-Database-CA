@@ -8,6 +8,7 @@
 -- ============================================================================
 
 -- Ensure cryptographic extension for UUID generation if needed
+BEGIN; 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Clean teardown (in reverse dependency order) for idempotency
@@ -230,3 +231,5 @@ CREATE INDEX idx_transactions_created_at ON transactions(created_at);
 CREATE INDEX idx_ledger_entries_tx ON ledger_entries(transaction_id);
 CREATE INDEX idx_ledger_entries_account ON ledger_entries(account_id);
 CREATE INDEX idx_fraud_flags_tx ON fraud_flags(transaction_id);
+
+COMMIT;
