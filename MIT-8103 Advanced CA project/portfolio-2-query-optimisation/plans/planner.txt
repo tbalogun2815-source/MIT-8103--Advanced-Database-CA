@@ -1,0 +1,199 @@
+                                 version                                 
+-------------------------------------------------------------------------
+ PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35229, 64-bit
+(1 row)
+
+ block_size 
+------------
+ 8192
+(1 row)
+
+ shared_buffers 
+----------------
+ 128MB
+(1 row)
+
+ work_mem 
+----------
+ 4MB
+(1 row)
+
+ seq_page_cost 
+---------------
+ 1
+(1 row)
+
+ random_page_cost 
+------------------
+ 4
+(1 row)
+
+ cpu_tuple_cost 
+----------------
+ 0.01
+(1 row)
+
+   table_name   | total_size | table_size | index_size 
+----------------+------------+------------+------------
+ customers      | 1520 kB    | 656 kB     | 824 kB
+ accounts       | 2640 kB    | 1640 kB    | 968 kB
+ transactions   | 79 MB      | 31 MB      | 48 MB
+ ledger_entries | 129 MB     | 40 MB      | 89 MB
+(4 rows)
+
+                                                                                    QUERY PLAN                                                                                    
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=295.86..915.20 rows=50 width=156) (actual time=1.248..1.475 rows=50.00 loops=1)
+   Buffers: shared hit=410 read=3
+   InitPlan 1
+     ->  Limit  (cost=295.01..295.02 rows=1 width=24) (actual time=1.135..1.136 rows=1.00 loops=1)
+           Buffers: shared hit=208
+           ->  Sort  (cost=295.01..310.02 rows=6001 width=24) (actual time=1.135..1.135 rows=1.00 loops=1)
+                 Sort Key: accounts.created_at
+                 Sort Method: top-N heapsort  Memory: 25kB
+                 Buffers: shared hit=208
+                 ->  Seq Scan on accounts  (cost=0.00..265.01 rows=6001 width=24) (actual time=0.114..0.742 rows=6001.00 loops=1)
+                       Buffers: shared hit=205
+   ->  Nested Loop  (cost=0.84..855.53 rows=69 width=156) (actual time=1.247..1.471 rows=50.00 loops=1)
+         Buffers: shared hit=410 read=3
+         ->  Index Scan using idx_ledger_entries_account_created_at_desc on ledger_entries le  (cost=0.42..281.34 rows=69 width=69) (actual time=1.228..1.236 rows=50.00 loops=1)
+               Index Cond: (account_id = (InitPlan 1).col1)
+               Index Searches: 1
+               Buffers: shared hit=210 read=3
+         ->  Index Scan using transactions_pkey on transactions t  (cost=0.42..8.32 rows=1 width=103) (actual time=0.004..0.004 rows=1.00 loops=50)
+               Index Cond: (transaction_id = le.transaction_id)
+               Index Searches: 50
+               Buffers: shared hit=200
+ Planning:
+   Buffers: shared hit=298 read=1 dirtied=6
+ Planning Time: 9.140 ms
+ Execution Time: 1.511 ms
+(25 rows)
+
+SET
+SET
+SET
+                                                                          QUERY PLAN                                                                          
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=13672.89..13678.72 rows=50 width=156) (actual time=151.863..155.238 rows=50.00 loops=1)
+   Buffers: shared hit=7742 read=1528
+   InitPlan 1
+     ->  Limit  (cost=295.01..295.02 rows=1 width=24) (actual time=0.769..0.772 rows=1.00 loops=1)
+           Buffers: shared hit=205
+           ->  Sort  (cost=295.01..310.02 rows=6001 width=24) (actual time=0.769..0.771 rows=1.00 loops=1)
+                 Sort Key: accounts.created_at
+                 Sort Method: top-N heapsort  Memory: 25kB
+                 Buffers: shared hit=205
+                 ->  Seq Scan on accounts  (cost=0.00..265.01 rows=6001 width=24) (actual time=0.027..0.435 rows=6001.00 loops=1)
+                       Buffers: shared hit=205
+   ->  Gather Merge  (cost=13377.88..13385.91 rows=69 width=156) (actual time=151.862..155.224 rows=50.00 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=7742 read=1528
+         ->  Sort  (cost=12377.85..12377.93 rows=29 width=156) (actual time=25.477..25.483 rows=33.33 loops=3)
+               Sort Key: le.created_at DESC
+               Sort Method: top-N heapsort  Memory: 51kB
+               Buffers: shared hit=7537 read=1528
+               Worker 0:  Sort Method: quicksort  Memory: 25kB
+               Worker 1:  Sort Method: top-N heapsort  Memory: 51kB
+               ->  Parallel Hash Join  (cost=7236.24..12377.15 rows=29 width=156) (actual time=11.637..24.586 rows=2000.33 loops=3)
+                     Hash Cond: (t.transaction_id = le.transaction_id)
+                     Buffers: shared hit=7521 read=1528
+                     ->  Parallel Seq Scan on transactions t  (cost=0.00..4818.75 rows=85875 width=103) (actual time=0.006..6.487 rows=103050.50 loops=2)
+                           Buffers: shared hit=3960
+                     ->  Parallel Hash  (cost=7235.88..7235.88 rows=29 width=69) (actual time=11.610..11.611 rows=2000.33 loops=3)
+                           Buckets: 8192 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 760kB
+                           Buffers: shared hit=3561 read=1528
+                           ->  Parallel Seq Scan on ledger_entries le  (cost=0.00..7235.88 rows=29 width=69) (actual time=0.137..16.972 rows=3000.50 loops=2)
+                                 Filter: (account_id = (InitPlan 1).col1)
+                                 Rows Removed by Filter: 203100
+                                 Buffers: shared hit=3561 read=1528
+ Planning:
+   Buffers: shared hit=17
+ Planning Time: 0.247 ms
+ Execution Time: 155.310 ms
+(37 rows)
+
+RESET
+RESET
+RESET
+                                                                                  QUERY PLAN                                                                                  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=5.26..5.76 rows=20 width=48) (actual time=0.094..0.094 rows=0.00 loops=1)
+   Group Key: (date_trunc('day'::text, completed_at))
+   Buffers: shared read=3
+   ->  Sort  (cost=5.26..5.31 rows=20 width=15) (actual time=0.094..0.094 rows=0.00 loops=1)
+         Sort Key: (date_trunc('day'::text, completed_at)) DESC
+         Sort Method: quicksort  Memory: 25kB
+         Buffers: shared read=3
+         ->  Index Only Scan using idx_transactions_transfers_completed_time on transactions  (cost=0.42..4.83 rows=20 width=15) (actual time=0.087..0.088 rows=0.00 loops=1)
+               Index Cond: (completed_at >= (CURRENT_DATE - '30 days'::interval))
+               Heap Fetches: 0
+               Index Searches: 1
+               Buffers: shared read=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 0.232 ms
+ Execution Time: 0.124 ms
+(16 rows)
+
+SET
+SET
+SET
+                                                                                  QUERY PLAN                                                                                   
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=6892.36..6895.14 rows=20 width=48) (actual time=142.930..145.977 rows=0.00 loops=1)
+   Group Key: (date_trunc('day'::text, completed_at))
+   Buffers: shared hit=4036
+   ->  Gather Merge  (cost=6892.36..6894.69 rows=20 width=15) (actual time=142.929..145.975 rows=0.00 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=4036
+         ->  Sort  (cost=5892.34..5892.36 rows=8 width=15) (actual time=20.977..20.978 rows=0.00 loops=3)
+               Sort Key: (date_trunc('day'::text, completed_at)) DESC
+               Sort Method: quicksort  Memory: 25kB
+               Buffers: shared hit=4036
+               Worker 0:  Sort Method: quicksort  Memory: 25kB
+               Worker 1:  Sort Method: quicksort  Memory: 25kB
+               ->  Parallel Seq Scan on transactions  (cost=0.00..5892.22 rows=8 width=15) (actual time=20.939..20.939 rows=0.00 loops=3)
+                     Filter: (((transaction_type)::text = 'TRANSFER'::text) AND ((status)::text = 'SUCCESS'::text) AND (completed_at >= (CURRENT_DATE - '30 days'::interval)))
+                     Rows Removed by Filter: 68700
+                     Buffers: shared hit=3960
+ Planning:
+   Buffers: shared hit=1
+ Planning Time: 0.236 ms
+ Execution Time: 146.009 ms
+(21 rows)
+
+RESET
+RESET
+RESET
+CREATE INDEX
+ANALYZE
+                                                               QUERY PLAN                                                               
+----------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on customers  (cost=8.17..96.43 rows=501 width=99) (actual time=0.060..0.141 rows=501.00 loops=1)
+   Recheck Cond: ((customer_type)::text = 'MERCHANT'::text)
+   Heap Blocks: exact=82
+   Buffers: shared hit=82 read=3
+   ->  Bitmap Index Scan on idx_tmp_customers_status  (cost=0.00..8.04 rows=501 width=0) (actual time=0.048..0.048 rows=501.00 loops=1)
+         Index Cond: ((customer_type)::text = 'MERCHANT'::text)
+         Index Searches: 1
+         Buffers: shared read=3
+ Planning:
+   Buffers: shared hit=48 read=1
+ Planning Time: 0.154 ms
+ Execution Time: 0.160 ms
+(12 rows)
+
+                                                  QUERY PLAN                                                   
+---------------------------------------------------------------------------------------------------------------
+ Seq Scan on customers  (cost=0.00..144.51 rows=4500 width=99) (actual time=0.006..0.370 rows=4500.00 loops=1)
+   Filter: ((customer_type)::text = 'INDIVIDUAL'::text)
+   Rows Removed by Filter: 501
+   Buffers: shared hit=82
+ Planning Time: 0.043 ms
+ Execution Time: 0.456 ms
+(6 rows)
+
+DROP INDEX
