@@ -1,0 +1,135 @@
+               entry_id               |              account_id              | entry_direction | entry_amount |    entry_created_at    |            transaction_id            |  idempotency_key  | transaction_type | transaction_amount | currency | transaction_status |           description           |      completed_at      
+--------------------------------------+--------------------------------------+-----------------+--------------+------------------------+--------------------------------------+-------------------+------------------+--------------------+----------+--------------------+---------------------------------+------------------------
+ 944e0c79-b736-4cc3-b107-cede4a7ddfa0 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    156000.60 | 2025-01-06 17:20:00+01 | d49c9cae-336d-44ed-bb17-af982895b9cd | DEP-INIT-00006000 | DEPOSIT          |          156000.60 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:20:01+01
+ acf27564-52fe-4f2a-a1cc-7bc703a6eae8 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155999.59 | 2025-01-06 17:19:55+01 | e664280f-572a-4e27-b6bd-03aab32d665f | DEP-INIT-00005999 | DEPOSIT          |          155999.59 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:56+01
+ 7381bc05-8432-4976-944c-b9b5af65393c | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155998.58 | 2025-01-06 17:19:50+01 | ce74e237-c6eb-405c-8ffe-d777b11a33bb | DEP-INIT-00005998 | DEPOSIT          |          155998.58 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:51+01
+ cbe3026e-907f-4d68-8b34-248a6ceb9300 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155997.57 | 2025-01-06 17:19:45+01 | 424aa30c-734b-40e9-90b8-5320b5ea19cd | DEP-INIT-00005997 | DEPOSIT          |          155997.57 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:46+01
+ 115870f7-fcfb-4a97-aadd-5f958365726f | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155996.56 | 2025-01-06 17:19:40+01 | a692d89d-b81d-4a78-bb3d-2f9eda5bc5d6 | DEP-INIT-00005996 | DEPOSIT          |          155996.56 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:41+01
+ 6a30167b-ae9c-44fe-90a1-f07e00cd742e | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155995.55 | 2025-01-06 17:19:35+01 | 6cff867b-59d5-4fdf-ab1b-1f6e80631131 | DEP-INIT-00005995 | DEPOSIT          |          155995.55 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:36+01
+ 017ba1a8-0edb-4a45-bc5c-e8f3e276232a | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155994.54 | 2025-01-06 17:19:30+01 | 72a87e69-0d4b-43df-9c2d-af3356d4cfc8 | DEP-INIT-00005994 | DEPOSIT          |          155994.54 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:31+01
+ 63efb13a-67c0-4929-a495-10ca9108d22f | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155993.53 | 2025-01-06 17:19:25+01 | bb00a92b-5f08-467c-84cb-7a7a37423ce6 | DEP-INIT-00005993 | DEPOSIT          |          155993.53 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:26+01
+ 031639d2-ce89-4073-9fd1-846beea7bc10 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155992.52 | 2025-01-06 17:19:20+01 | f08892fb-c15d-42de-bf82-da54f67f7b98 | DEP-INIT-00005992 | DEPOSIT          |          155992.52 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:21+01
+ 1fbd08ce-b920-4f8f-b575-c2d4890b2a28 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155991.51 | 2025-01-06 17:19:15+01 | d2c71527-61ec-410e-8bb9-bc57b9fbcdef | DEP-INIT-00005991 | DEPOSIT          |          155991.51 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:16+01
+ f165fc04-bae6-40cc-be74-99589241e74b | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155990.50 | 2025-01-06 17:19:10+01 | 66c644d3-6005-4390-a21d-3ea9c37aeb3e | DEP-INIT-00005990 | DEPOSIT          |          155990.50 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:11+01
+ b3c338f7-3ad1-4c82-9747-f43c6171f577 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155989.49 | 2025-01-06 17:19:05+01 | 6af5c3f3-0f27-4bad-91df-0692048d0bca | DEP-INIT-00005989 | DEPOSIT          |          155989.49 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:06+01
+ ae79a03a-e38a-404f-9d1e-2359d71b9685 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155988.48 | 2025-01-06 17:19:00+01 | 327b213b-6eb7-4d01-b9b2-46c50c230e53 | DEP-INIT-00005988 | DEPOSIT          |          155988.48 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:19:01+01
+ a478a9e5-5a90-4fcc-8fc5-dfec52b8b077 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155987.47 | 2025-01-06 17:18:55+01 | 906c0466-2bbb-49da-8196-2a950298bcfd | DEP-INIT-00005987 | DEPOSIT          |          155987.47 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:56+01
+ 3186e44f-dea1-4bad-950b-b5ecd413a1e6 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155986.46 | 2025-01-06 17:18:50+01 | ffae1717-a193-4f6a-8acb-5ae94e7ab40b | DEP-INIT-00005986 | DEPOSIT          |          155986.46 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:51+01
+ 01a28325-8d90-4973-b481-706cf40d276c | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155985.45 | 2025-01-06 17:18:45+01 | 8ed13acc-72c9-4f6f-9c21-345b562df123 | DEP-INIT-00005985 | DEPOSIT          |          155985.45 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:46+01
+ 9890c13a-ea2d-4016-b33d-619565a7fd13 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155984.44 | 2025-01-06 17:18:40+01 | 010f13be-e4f0-40a5-81ad-a2c81b18e93f | DEP-INIT-00005984 | DEPOSIT          |          155984.44 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:41+01
+ 0db0cdb6-5ee7-4f50-b3a9-295af37e0b51 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155983.43 | 2025-01-06 17:18:35+01 | c88acdae-ecca-4be0-87ee-da5ce3612c2f | DEP-INIT-00005983 | DEPOSIT          |          155983.43 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:36+01
+ 0fad3cd6-9cc9-449c-afde-ee712fd87f14 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155982.42 | 2025-01-06 17:18:30+01 | be51fc01-59f3-43d4-95ea-c68f230e4cb2 | DEP-INIT-00005982 | DEPOSIT          |          155982.42 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:31+01
+ 67a1c105-6330-48a7-b689-49aab1c9f83c | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155981.41 | 2025-01-06 17:18:25+01 | 418f690e-c016-4dd5-ad47-41db852b3b7d | DEP-INIT-00005981 | DEPOSIT          |          155981.41 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:26+01
+ 8bd30282-fff0-4411-a019-1013e9a84f4f | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155980.40 | 2025-01-06 17:18:20+01 | 00886820-f5b4-4ebd-b2e5-f69856886ea9 | DEP-INIT-00005980 | DEPOSIT          |          155980.40 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:21+01
+ 730409ba-026a-4c0a-8312-6ef6e935aa6c | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155979.39 | 2025-01-06 17:18:15+01 | 9a16bfdf-384c-4b26-b96e-92ade21fd541 | DEP-INIT-00005979 | DEPOSIT          |          155979.39 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:16+01
+ 2f062cc7-623f-40d1-9429-ef0b7f4d42a3 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155978.38 | 2025-01-06 17:18:10+01 | 77706e66-aa3d-4f37-98d0-d1e9e9c00641 | DEP-INIT-00005978 | DEPOSIT          |          155978.38 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:11+01
+ fcb267f4-76e6-44d0-beff-3eda652248c3 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155977.37 | 2025-01-06 17:18:05+01 | 78e3281d-efdb-434a-93b4-e5c990922e67 | DEP-INIT-00005977 | DEPOSIT          |          155977.37 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:06+01
+ 106bddb4-9c3b-4129-bb73-c5a484dee1b5 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155976.36 | 2025-01-06 17:18:00+01 | f7ef39d2-68fb-401a-b36c-fa6e5b9b271d | DEP-INIT-00005976 | DEPOSIT          |          155976.36 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:18:01+01
+ 0da8e6b3-7fdf-48cc-99ec-1443914a22e1 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155975.35 | 2025-01-06 17:17:55+01 | 9ddbb1d8-6452-4010-872d-7b0864ef9979 | DEP-INIT-00005975 | DEPOSIT          |          155975.35 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:56+01
+ 7f96e6b1-d78f-4782-81ae-0e10f4075433 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155974.34 | 2025-01-06 17:17:50+01 | 210f5948-b76f-4a69-bfe3-6dd4258bd799 | DEP-INIT-00005974 | DEPOSIT          |          155974.34 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:51+01
+ beeff570-6aa8-4706-b308-71893ddc8184 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155973.33 | 2025-01-06 17:17:45+01 | a220ed78-1964-4d15-a316-4dbf8fda12cf | DEP-INIT-00005973 | DEPOSIT          |          155973.33 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:46+01
+ f172e75e-e2e4-44e2-b4c2-129ca0ac91c5 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155972.32 | 2025-01-06 17:17:40+01 | 6727f145-65f3-4ac8-83e9-e75ba4f89dfd | DEP-INIT-00005972 | DEPOSIT          |          155972.32 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:41+01
+ 4ca81ea2-c1d3-42a5-886c-126c44764652 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155971.31 | 2025-01-06 17:17:35+01 | c2437303-0254-48d6-b718-0c1b55391639 | DEP-INIT-00005971 | DEPOSIT          |          155971.31 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:36+01
+ 922e6a68-40dd-4d3e-9e3a-36aa9352233f | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155970.30 | 2025-01-06 17:17:30+01 | 22b43647-03d4-4c43-a344-12daddf29aed | DEP-INIT-00005970 | DEPOSIT          |          155970.30 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:31+01
+ ed8a1cbe-ce18-412c-ba0f-5935a3d29f2a | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155969.29 | 2025-01-06 17:17:25+01 | 1485ec22-e406-46d7-a0c8-124c9c59f597 | DEP-INIT-00005969 | DEPOSIT          |          155969.29 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:26+01
+ 0a56c3ea-ea87-4877-80c0-72582d327a46 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155968.28 | 2025-01-06 17:17:20+01 | ded46978-1899-4f29-a011-5a70ba3f0fa4 | DEP-INIT-00005968 | DEPOSIT          |          155968.28 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:21+01
+ c1b59f84-5cc6-46c9-aba0-c584931f3536 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155967.27 | 2025-01-06 17:17:15+01 | 8f399879-8980-412c-a719-ac85f382faac | DEP-INIT-00005967 | DEPOSIT          |          155967.27 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:16+01
+ 0ba77b11-3ec6-40b6-8c57-94c4388e477a | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155966.26 | 2025-01-06 17:17:10+01 | 665f681a-7730-496d-8d05-1b918cdd6838 | DEP-INIT-00005966 | DEPOSIT          |          155966.26 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:11+01
+ 551850c9-a252-4e5b-9015-7abdcf92ea6a | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155965.25 | 2025-01-06 17:17:05+01 | 7251870b-4a98-41d8-9720-8b39a2ed3e89 | DEP-INIT-00005965 | DEPOSIT          |          155965.25 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:06+01
+ a9fe4585-9580-439e-98c6-83b5bf80a9e2 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155964.24 | 2025-01-06 17:17:00+01 | f45bc4f9-04b7-43b5-bf24-937c05c2a340 | DEP-INIT-00005964 | DEPOSIT          |          155964.24 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:17:01+01
+ 78051867-1478-4fa9-b5f6-03f25701dd8d | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155963.23 | 2025-01-06 17:16:55+01 | 5772792c-82f4-4b10-bfcc-ed0ec795004c | DEP-INIT-00005963 | DEPOSIT          |          155963.23 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:56+01
+ 416e48af-c766-4cf1-9d6d-2144815d6c6e | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155962.22 | 2025-01-06 17:16:50+01 | e20edbc2-ca5a-426c-99a1-59256ef16ef3 | DEP-INIT-00005962 | DEPOSIT          |          155962.22 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:51+01
+ bf2c7dec-d291-47a3-b467-7b24a860e850 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155961.21 | 2025-01-06 17:16:45+01 | 00cce11e-5d2c-4f44-b9de-17031a2e6f16 | DEP-INIT-00005961 | DEPOSIT          |          155961.21 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:46+01
+ abdfa7d8-975b-401c-a99f-c7d389c5d4e1 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155960.20 | 2025-01-06 17:16:40+01 | 88bb3073-bb8d-447a-a7b5-eada68b94505 | DEP-INIT-00005960 | DEPOSIT          |          155960.20 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:41+01
+ 2403b6b8-9a23-47e4-956f-407447f9311e | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155959.19 | 2025-01-06 17:16:35+01 | 96ae275b-4013-422a-a5c4-63b1355ae7ea | DEP-INIT-00005959 | DEPOSIT          |          155959.19 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:36+01
+ 6e8f4a57-f874-4705-bdfa-835d62a136d0 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155958.18 | 2025-01-06 17:16:30+01 | 3dd516fe-3c5b-4c29-b6cb-1ad176a65df6 | DEP-INIT-00005958 | DEPOSIT          |          155958.18 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:31+01
+ 87ca1f64-1b77-4820-b9dd-de1af577fda3 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155957.17 | 2025-01-06 17:16:25+01 | 0294b826-6778-46c8-8f82-06fa78bfdc97 | DEP-INIT-00005957 | DEPOSIT          |          155957.17 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:26+01
+ c58ea156-f354-459a-bcac-cdd64baa9540 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155956.16 | 2025-01-06 17:16:20+01 | d1729e31-af89-42ac-87ca-e7f547be3576 | DEP-INIT-00005956 | DEPOSIT          |          155956.16 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:21+01
+ ff14a365-56d5-4e6c-9ec3-2313f9af2f6b | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155955.15 | 2025-01-06 17:16:15+01 | c9b0f0b2-9d9f-4114-85fc-bf1f81384720 | DEP-INIT-00005955 | DEPOSIT          |          155955.15 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:16+01
+ 5a96bd21-b0b1-47b2-a027-4007cf1ff234 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155954.14 | 2025-01-06 17:16:10+01 | dc7e7f4c-8adf-49d8-9a21-f065fc17d154 | DEP-INIT-00005954 | DEPOSIT          |          155954.14 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:11+01
+ b9b56544-4b05-4531-bfbe-e92ba2f9c10f | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155953.13 | 2025-01-06 17:16:05+01 | 6be876f3-938c-4dab-95d0-ffd1cae7990e | DEP-INIT-00005953 | DEPOSIT          |          155953.13 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:06+01
+ 3cd87113-c27f-48df-9159-c52f29f212da | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155952.12 | 2025-01-06 17:16:00+01 | 08d44985-d58f-453c-889e-043dfd788ca2 | DEP-INIT-00005952 | DEPOSIT          |          155952.12 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:16:01+01
+ addead49-7df7-4015-994c-dab73daf2416 | 00000000-0000-0000-0000-000000000002 | DEBIT           |    155951.11 | 2025-01-06 17:15:55+01 | e75ee3de-d8e0-4d5b-a5e5-e32c8f53673b | DEP-INIT-00005951 | DEPOSIT          |          155951.11 | NGN      | SUCCESS            | Opening customer wallet deposit | 2025-01-06 17:15:56+01
+(50 rows)
+
+ transfer_day | total_transfers | total_amount 
+--------------+-----------------+--------------
+(0 rows)
+
+             customer_id              |  customer_name   | account_number |            transaction_id            |  idempotency_key   | transfer_amount | currency | transfer_status |     transfer_time      |            description             
+--------------------------------------+------------------+----------------+--------------------------------------+--------------------+-----------------+----------+-----------------+------------------------+------------------------------------
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 2000000001     | d8d21da4-6bd2-4355-8fab-721d39fd56d0 | TXN-TRF-0000017473 |          393.73 | NGN      | SUCCESS         | 2025-01-10 05:51:13+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 2000000001     | 5557bcd1-d64b-4790-a5a8-81726c75ff08 | TXN-TRF-0000131473 |          393.73 | NGN      | SUCCESS         | 2025-01-11 13:31:13+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 1000000001     | 1033c9be-0ff3-45a1-9278-51fe631afe80 | TXN-TRF-0000144000 |          380.00 | NGN      | SUCCESS         | 2025-01-11 17:00:00+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 1000000001     | 9206ddc4-b9fc-4016-8511-2df691621cc8 | TXN-TRF-0000030000 |          380.00 | NGN      | SUCCESS         | 2025-01-10 09:20:00+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 2000000001     | e1d2dfeb-b28a-4d9a-a81a-85322260afb1 | TXN-TRF-0000047473 |          373.73 | NGN      | SUCCESS         | 2025-01-10 14:11:13+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 2000000001     | 34a15823-eb5b-4f51-a87d-7f2e6afbdfcb | TXN-TRF-0000161473 |          373.73 | NGN      | SUCCESS         | 2025-01-11 21:51:13+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 1000000001     | b41c8b8a-4239-4adc-9d43-9e5913b5e3a5 | TXN-TRF-0000060000 |          360.00 | NGN      | SUCCESS         | 2025-01-10 17:40:00+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 1000000001     | 26a4ab61-ae15-462e-ad61-4268bb0b2aaf | TXN-TRF-0000174000 |          360.00 | NGN      | SUCCESS         | 2025-01-12 01:20:00+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 2000000001     | fc1d723f-f4eb-4f98-ae2c-21ceba0f928c | TXN-TRF-0000077473 |          353.73 | NGN      | SUCCESS         | 2025-01-10 22:31:13+01 | Customer P2P wallet money transfer
+ 30a1cf63-5ab3-4289-a6bb-748a958c84c1 | Chinedu Ogunleye | 2000000001     | f204208b-6285-4911-9926-b24ebfce895f | TXN-TRF-0000191473 |          353.73 | NGN      | SUCCESS         | 2025-01-12 06:11:13+01 | Customer P2P wallet money transfer
+(10 rows)
+
+             customer_id              | first_name | last_name |           email            | large_transfer_count | total_large_transfer_volume 
+--------------------------------------+------------+-----------+----------------------------+----------------------+-----------------------------
+ 0a9897ce-16da-4ce1-af92-606c2b967484 | Emeka      | Okeke     | customer107@quickfund.test |                   12 |                     4539.36
+ e0401e62-2818-484b-9c04-c366e64b1c95 | Oluwaseun  | Okonkwo   | customer276@quickfund.test |                   12 |                     4522.32
+ de44fb7b-dbe5-4561-87e8-3d6bd9bd3d95 | Oluwaseun  | Okonkwo   | customer996@quickfund.test |                   12 |                     4504.20
+ f4095f4a-7c0d-4c0e-ab7d-2021cfcdf83e | Damilola   | Garba     | customer33@quickfund.test  |                   12 |                     4496.94
+ b02465a7-72eb-45a7-a187-c4a397bb7942 | Mustapha   | Suleiman  | customer959@quickfund.test |                   12 |                     4492.08
+ b4c0f308-8f6b-413d-9bc0-d4a59a19c733 | Zainab     | Oladipo   | customer308@quickfund.test |                   12 |                     4490.88
+ cac03992-5ad2-4217-8e47-790c7d7137ae | Fatima     | Alabi     | customer922@quickfund.test |                   12 |                     4479.96
+ 982115ca-cc30-4f4b-9daf-72e5203420e5 | Fatima     | Alabi     | customer202@quickfund.test |                   12 |                     4479.90
+ 75e91ecd-dfeb-4381-bb05-9fe2addfdefb | Ibrahim    | Ibe       | customer885@quickfund.test |                   12 |                     4467.84
+ 5310515c-d1b7-4362-af69-5d2961971fee | Zainab     | Oladipo   | customer848@quickfund.test |                   12 |                     4455.72
+ 781dc975-1961-4a84-bd4c-ed6c0f9458cd | Babajide   | Sanusi    | customer991@quickfund.test |                   12 |                     4448.40
+ 61ed09de-5259-4aa8-a1a5-9ca495cdd265 | Babajide   | Sanusi    | customer811@quickfund.test |                   12 |                     4443.60
+ 42a1b775-2e14-4359-ab3d-97b27a1f4f95 | Ngozi      | Bello     | customer624@quickfund.test |                   11 |                     4197.69
+ c66ad681-20ee-4fc4-be90-b6918703a97d | Ngozi      | Bello     | customer524@quickfund.test |                   11 |                     4197.69
+ e1eabb97-ecaa-4c94-b258-c5e16b690756 | Ngozi      | Bello     | customer724@quickfund.test |                   11 |                     4197.69
+ b576899e-95f4-431c-8d93-bd51aa7b6e28 | Ngozi      | Bello     | customer984@quickfund.test |                   11 |                     4195.49
+ 5a0c02f5-c2aa-4b98-bef7-30a43b6a014c | Ngozi      | Bello     | customer884@quickfund.test |                   11 |                     4195.49
+ 77d75749-bb7d-4275-9f4b-6518ece96f85 | Ngozi      | Bello     | customer544@quickfund.test |                   11 |                     4193.29
+ b67b176f-b542-4f9c-b6e6-391060c1bbfa | Ngozi      | Bello     | customer344@quickfund.test |                   11 |                     4193.29
+ 07269ed5-5e84-473e-a490-72cb54fbb993 | Ngozi      | Bello     | customer444@quickfund.test |                   11 |                     4193.29
+(20 rows)
+
+            transaction_id            |  idempotency_key   | transaction_type | amount | currency | reversal_of | status  |            description             |       created_at       |      completed_at      
+--------------------------------------+--------------------+------------------+--------+----------+-------------+---------+------------------------------------+------------------------+------------------------
+ d0a6418a-9abe-4d2c-bd65-4414278400fa | TXN-TRF-0000000001 | TRANSFER         |  21.01 | NGN      |             | SUCCESS | Customer P2P wallet money transfer | 2025-01-10 01:00:01+01 | 2025-01-10 01:00:02+01
+(1 row)
+
+ account_id | account_number | account_name | stored_balance | computed_ledger_balance | discrepancy 
+------------+----------------+--------------+----------------+-------------------------+-------------
+(0 rows)
+
+            transaction_id            |   idempotency_key    | transaction_type | transaction_amount | total_debits | total_credits  |    imbalance    
+--------------------------------------+----------------------+------------------+--------------------+--------------+----------------+-----------------
+ 00000000-0000-0000-0000-000000000003 | TXN-CAPITAL-SEED-001 | DEPOSIT          |     10000000000.00 |         0.00 | 10000000000.00 | -10000000000.00
+(1 row)
+
+ transaction_id | idempotency_key | transaction_type | transaction_amount | total_debits | total_credits | imbalance 
+----------------+-----------------+------------------+--------------------+--------------+---------------+-----------
+(0 rows)
+
+      transfer_day      | total_transfers_initiated | gross_transfer_volume | completed_transfer_count | net_completed_volume | reversed_transfer_count | reversed_transfer_volume 
+------------------------+---------------------------+-----------------------+--------------------------+----------------------+-------------------------+--------------------------
+ 2025-01-12 00:00:00+01 |                     30801 |            6466386.00 |                    30786 |           6463566.00 |                      15 |                  2820.00
+ 2025-01-11 00:00:00+01 |                     86400 |           18136368.00 |                    86356 |          18127328.00 |                      44 |                  9040.00
+ 2025-01-10 00:00:00+01 |                     82799 |           17380766.00 |                    82758 |          17372466.00 |                      41 |                  8300.00
+(3 rows)
+
+ correct_total | fan_out_total 
+---------------+---------------
+   41983520.00 |   83967040.00
+(1 row)
+
+ customer_id | first_name | last_name | email | phone | failed_transaction_count | total_failed_amount 
+-------------+------------+-----------+-------+-------+--------------------------+---------------------
+(0 rows)
+
+   transaction_month    | total_transaction_count | total_transaction_amount | average_transaction_amount | transfer_count | transfer_amount | deposit_count | deposit_amount 
+------------------------+-------------------------+--------------------------+----------------------------+----------------+-----------------+---------------+----------------
+ 2025-01-01 00:00:00+01 |                  206001 |           10959989448.90 |                   53203.57 |         199900 |     41963360.00 |          6001 | 10918005928.90
+(1 row)
+
