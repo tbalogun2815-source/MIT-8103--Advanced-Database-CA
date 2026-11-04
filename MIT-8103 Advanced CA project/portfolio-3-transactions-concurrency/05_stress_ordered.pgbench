@@ -1,0 +1,16 @@
+-- pgbench script: transfer_funds() (ordered locking) under heavy contention.
+-- Each client picks two different wallets from a hot set of 20 real ACTIVE
+-- accounts and moves a random amount between them.
+\set a random(0, 19)
+\set off random(1, 19)
+\set b (:a + :off) % 20
+WITH hot AS (
+  SELECT account_number FROM accounts
+  WHERE status = 'ACTIVE' AND account_number >= '1000000000' AND account_number < '9000000000'
+  ORDER BY account_number LIMIT 20
+)
+SELECT transfer_funds(
+  (SELECT account_number FROM hot ORDER BY account_number OFFSET :a LIMIT 1),
+  (SELECT account_number FROM hot ORDER BY account_number OFFSET :b LIMIT 1),
+  round((1 + random() * 99)::numeric, 2),
+  'pgb-' || gen_random_uuid()::text);
