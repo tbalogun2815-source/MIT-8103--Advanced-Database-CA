@@ -1,0 +1,335 @@
+-- =====================================================================
+
+-- Portfolio 3: COMMIT, ROLLBACK, failure and idempotency demos
+
+-- Run from PowerShell (not from inside psql), from the project folder:
+
+--
+
+--   psql -U postgres -h localhost -d quickfund_db -a -f portfolio-3-transactions-concurrency/03_commit_rollback_demo.sql *> portfolio-3-transactions-concurrency/output/03_commit_rollback_output.txt
+
+--
+
+-- "-a" echoes each statement next to its result. "*>" saves everything
+
+-- (statements, results and the deliberate errors in Demos 3 and 5) to the
+
+-- output file. psql is needed because the file uses \echo and \gset,
+
+-- which pgAdmin does not support. Requires 01_transfer_function.sql.
+
+-- =====================================================================
+
+
+
+\pset pager off
+
+Pager usage is off.
+
+
+-- Two real ACTIVE accounts (sender balance must be well above 500)
+
+\set acct1 '2000000955'
+
+\set acct2 '2000000992'
+
+
+
+\echo
+
+
+\echo '=== Starting balances'
+
+=== Starting balances
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162341.84
+ 2000000992     | 162293.45
+(2 rows)
+
+
+
+-- ---------------------------------------------------------------------
+
+\echo
+
+
+\echo '=== Demo 1: COMMIT. Transfer 100.00 and keep it.'
+
+=== Demo 1: COMMIT. Transfer 100.00 and keep it.
+SELECT 'demo-commit-' || gen_random_uuid() AS k \gset
+
+BEGIN;
+
+BEGIN
+SELECT transfer_funds(:'acct1', :'acct2', 100.00, :'k') AS transaction_id;
+
+            transaction_id            
+--------------------------------------
+ 76c18356-d32c-4672-a6c0-95779ac19815
+(1 row)
+
+\echo '--- inside the transaction (not yet visible to other sessions):'
+
+--- inside the transaction (not yet visible to other sessions):
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162241.84
+ 2000000992     | 162393.45
+(2 rows)
+
+COMMIT;
+
+COMMIT
+\echo '--- after COMMIT (permanent):'
+
+--- after COMMIT (permanent):
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162241.84
+ 2000000992     | 162393.45
+(2 rows)
+
+
+
+-- ---------------------------------------------------------------------
+
+\echo
+
+
+\echo '=== Demo 2: ROLLBACK. Transfer 100.00, then change our mind.'
+
+=== Demo 2: ROLLBACK. Transfer 100.00, then change our mind.
+SELECT 'demo-rollback-' || gen_random_uuid() AS k \gset
+
+BEGIN;
+
+BEGIN
+SELECT transfer_funds(:'acct1', :'acct2', 100.00, :'k') AS transaction_id;
+
+            transaction_id            
+--------------------------------------
+ 31bf0813-f4d2-4003-bd85-235e360f8ad7
+(1 row)
+
+\echo '--- inside the transaction the money has moved:'
+
+--- inside the transaction the money has moved:
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162141.84
+ 2000000992     | 162493.45
+(2 rows)
+
+ROLLBACK;
+
+ROLLBACK
+\echo '--- after ROLLBACK the balances are back to what they were:'
+
+--- after ROLLBACK the balances are back to what they were:
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162241.84
+ 2000000992     | 162393.45
+(2 rows)
+
+\echo '--- and no trace of that transaction remains:'
+
+--- and no trace of that transaction remains:
+SELECT count(*) AS rows_for_rolled_back_key FROM transactions WHERE idempotency_key = :'k';
+
+ rows_for_rolled_back_key 
+--------------------------
+                        0
+(1 row)
+
+
+
+-- ---------------------------------------------------------------------
+
+\echo
+
+
+\echo '=== Demo 3: automatic rollback on failure (insufficient funds).'
+
+=== Demo 3: automatic rollback on failure (insufficient funds).
+\echo '--- the next statement is EXPECTED to fail:'
+
+--- the next statement is EXPECTED to fail:
+BEGIN;
+
+BEGIN
+SELECT transfer_funds(:'acct1', :'acct2', 999999999.00, 'demo-too-big');
+
+ROLLBACK;
+
+psql:portfolio-3-transactions-concurrency/03_commit_rollback_demo.sql:59: ERROR:  INSUFFICIENT_FUNDS: balance 162241.84 is less than 999999999.00
+CONTEXT:  PL/pgSQL function transfer_funds(text,text,numeric,character varying,character varying) line 54 at RAISE
+ROLLBACK
+\echo '--- the failed attempt changed nothing:'
+
+--- the failed attempt changed nothing:
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162241.84
+ 2000000992     | 162393.45
+(2 rows)
+
+SELECT count(*) AS rows_for_failed_key FROM transactions WHERE idempotency_key = 'demo-too-big';
+
+ rows_for_failed_key 
+---------------------
+                   0
+(1 row)
+
+
+
+-- ---------------------------------------------------------------------
+
+\echo
+
+
+\echo '=== Demo 4: idempotency. The same request sent twice is applied once.'
+
+=== Demo 4: idempotency. The same request sent twice is applied once.
+SELECT 'demo-idem-' || gen_random_uuid() AS k \gset
+
+SELECT transfer_funds(:'acct1', :'acct2', 25.00, :'k') AS first_call;
+
+              first_call              
+--------------------------------------
+ bbdd9ba4-f042-4ac1-9d69-78e5e6b298d3
+(1 row)
+
+SELECT transfer_funds(:'acct1', :'acct2', 25.00, :'k') AS retry_same_id;
+
+            retry_same_id             
+--------------------------------------
+ bbdd9ba4-f042-4ac1-9d69-78e5e6b298d3
+(1 row)
+
+SELECT count(*) AS transactions_with_this_key FROM transactions WHERE idempotency_key = :'k';
+
+ transactions_with_this_key 
+----------------------------
+                          1
+(1 row)
+
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162216.84
+ 2000000992     | 162418.45
+(2 rows)
+
+
+
+-- ---------------------------------------------------------------------
+
+\echo
+
+
+\echo '=== Demo 5: SAVEPOINT. Undo one failed step without losing earlier work.'
+
+=== Demo 5: SAVEPOINT. Undo one failed step without losing earlier work.
+SELECT 'demo-sp-' || gen_random_uuid() AS k \gset
+
+BEGIN;
+
+BEGIN
+SELECT transfer_funds(:'acct1', :'acct2', 10.00, :'k') AS first_transfer;
+
+            first_transfer            
+--------------------------------------
+ 43bd07bb-7b4b-4588-a042-c78cf5b19f4e
+(1 row)
+
+SAVEPOINT before_second_transfer;
+
+SAVEPOINT
+\echo '--- the next statement is EXPECTED to fail:'
+
+--- the next statement is EXPECTED to fail:
+SELECT transfer_funds(:'acct1', :'acct2', 999999999.00, 'demo-sp-too-big');
+
+psql:portfolio-3-transactions-concurrency/03_commit_rollback_demo.sql:84: ERROR:  INSUFFICIENT_FUNDS: balance 162206.84 is less than 999999999.00
+CONTEXT:  PL/pgSQL function transfer_funds(text,text,numeric,character varying,character varying) line 54 at RAISE
+ROLLBACK TO SAVEPOINT before_second_transfer;
+
+ROLLBACK
+\echo '--- the first transfer is still alive inside the transaction:'
+
+--- the first transfer is still alive inside the transaction:
+SELECT account_number, balance FROM accounts
+
+WHERE account_number IN (:'acct1', :'acct2') ORDER BY account_number;
+
+ account_number |  balance  
+----------------+-----------
+ 2000000955     | 162206.84
+ 2000000992     | 162428.45
+(2 rows)
+
+COMMIT;
+
+COMMIT
+
+
+-- ---------------------------------------------------------------------
+
+\echo
+
+
+\echo '=== Double-entry evidence: the latest ledger lines for these accounts'
+
+=== Double-entry evidence: the latest ledger lines for these accounts
+SELECT l.transaction_id, a.account_number, l.entry_direction, l.amount
+
+FROM ledger_entries l
+
+JOIN accounts a ON a.account_id = l.account_id
+
+WHERE a.account_number IN (:'acct1', :'acct2')
+
+ORDER BY l.created_at DESC, l.entry_id DESC
+
+LIMIT 8;
+            transaction_id            | account_number | entry_direction | amount 
+--------------------------------------+----------------+-----------------+--------
+ 43bd07bb-7b4b-4588-a042-c78cf5b19f4e | 2000000992     | CREDIT          |  10.00
+ 43bd07bb-7b4b-4588-a042-c78cf5b19f4e | 2000000955     | DEBIT           |  10.00
+ bbdd9ba4-f042-4ac1-9d69-78e5e6b298d3 | 2000000992     | CREDIT          |  25.00
+ bbdd9ba4-f042-4ac1-9d69-78e5e6b298d3 | 2000000955     | DEBIT           |  25.00
+ 76c18356-d32c-4672-a6c0-95779ac19815 | 2000000992     | CREDIT          | 100.00
+ 76c18356-d32c-4672-a6c0-95779ac19815 | 2000000955     | DEBIT           | 100.00
+ 5d6dfbb7-2896-4254-95bf-cb79f60fd92c | 2000000992     | CREDIT          |  10.00
+ 5d6dfbb7-2896-4254-95bf-cb79f60fd92c | 2000000955     | DEBIT           |  10.00
+(8 rows)
+
