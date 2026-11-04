@@ -1,0 +1,210 @@
+=====================================================================
+PORTFOLIO 3: TRANSACTIONS & CONCURRENCY - MY STUDY & REVISION NOTES
+Course: MIT-8103 Advanced Database Systems
+Student / Project: QuickFund Digital Wallet & Financial Ledger
+=====================================================================
+
+1. BIG PICTURE - WHAT IS THIS PORTFOLIO ABOUT?
+---------------------------------------------------------------------
+In simple terms, Portfolio 3 is all about moving money safely between
+wallets without losing money, double-spending, or freezing the database.
+
+When hundreds of people transfer money at the exact same second:
+- Two people might try to spend the same money at the same time.
+- Two transactions might lock each other and cause a deadlock freeze.
+- A network error might make a user tap "Pay" twice.
+- A server might crash halfway through a transfer.
+
+This portfolio shows how PostgreSQL transactions, row-level locks,
+isolation levels, double-entry bookkeeping, and ordered locking solve
+every single one of these problems.
+
+
+2. SCRIPT-BY-SCRIPT BREAKDOWN (WHAT EACH FILE DOES)
+---------------------------------------------------------------------
+* 01_transfer_function.sql
+  - The main money-moving function: transfer_funds().
+  - It moves money from wallet A to wallet B as ONE complete atomic unit.
+  - First, it checks the idempotency key so repeat clicks don't double charge.
+  - Second, it locks BOTH accounts using LEAST(id1, id2) and GREATEST(id1, id2).
+    Because every session locks in the exact same order (smaller UUID first),
+    two transfers can never deadlock each other.
+  - Third, it reads the sender's balance AFTER holding the lock, checks if
+    there's enough money, and updates both accounts.
+  - Fourth, it writes two ledger lines (one DEBIT, one CREDIT) using real-time
+    clock_timestamp() so statement timelines stay accurate.
+  - It also includes a broken version called transfer_funds_unordered()
+    which locks sender-first and adds a tiny sleep. This was made only to
+    prove how easily deadlocks happen without ordered locking.
+
+* 02_demo_setup.sql
+  - Creates two demo users: "Demo Alice" (account 9000000001) and
+    "Demo Bob" (account 9000000002).
+  - Puts 500.00 into each account.
+  - These are separate disposable accounts so we can test locks and deadlocks
+    without messing up the real 400,000+ financial ledger lines.
+  - We can re-run this anytime to reset their balances back to 500.00.
+
+* 03_commit_rollback_demo.sql
+  - Runs 5 real-life payment scenarios:
+    1. COMMIT: Transfer 100.00, commit it, and show the change is permanent.
+    2. ROLLBACK: Transfer 100.00, change our mind, rollback, and show the
+       money never moved and the transaction row disappeared.
+    3. Failure Rollback: Try sending 999 million (insufficient funds). The
+       database throws an error and rolls back cleanly with zero balance change.
+    4. Idempotency: Send the exact same transfer call twice with the same key.
+       The database returns the original transaction ID without taking the money twice.
+    5. SAVEPOINT: Start a transaction, do a 10.00 transfer, set a savepoint,
+       try a failed 999 million transfer, rollback to the savepoint, and commit.
+       The 10.00 transfer survives while the bad transfer is discarded!
+  - Finishes by querying the latest ledger lines to prove every debit has a credit.
+
+* 05_stress_ordered.pgbench
+  - A benchmark script that tests the safe transfer_funds() function.
+  - Takes 20 active accounts and makes concurrent clients randomly transfer
+    amounts between them over and over.
+  - Because it uses ordered locking, it handles heavy contention with 0 deadlocks.
+
+* 06_stress_unordered.pgbench
+  - The exact same benchmark workload, but calls transfer_funds_unordered().
+  - Because locks are acquired in random sender-first order, concurrent opposite
+    transfers immediately deadlock.
+
+* 07_integrity_check.sql
+  - The financial audit script. Run before and after stress tests.
+  - Checks 5 golden rules:
+    1. Conservation of money: total money in system must stay exactly 10 billion.
+    2. Stress transfer count: every success transfer must have exactly 2 ledger lines.
+    3. Balanced transactions: total debits minus total credits must be 0.
+    4. Ledger match: account balance must equal the sum of its ledger lines.
+    5. Stuck transactions: no stress transaction should stay stuck in 'PENDING'.
+
+* 08_own_experiment_reversal.sql
+  - My own experiment: a safe, atomic reverse_transfer() function.
+  - Undoes a completed transfer without deleting anything (financial ledgers
+    must be append-only for audits).
+  - Locks the original transaction row to prevent double reversals.
+  - Verifies the original was SUCCESS and hasn't already been reversed.
+  - Checks the receiver actually has enough balance to return the money.
+  - Locks both accounts in ordered order (LEAST/GREATEST).
+  - Posts mirror ledger entries (DEBIT the receiver, CREDIT the sender).
+  - Marks original transaction as REVERSED and logs the new reversal transaction.
+
+
+3. SUMMARY OF OUTPUT (output/03_commit_rollback_output.txt)
+---------------------------------------------------------------------
+- Starting balances: Account 2000000955 had 162,341.84 and 2000000992 had 162,293.45.
+- Demo 1 (Commit): Transferred 100.00. Inside transaction, balances showed 162,241.84
+  and 162,393.45. After COMMIT, balances remained permanently saved.
+- Demo 2 (Rollback): Transferred 100.00. Inside transaction, money moved. After ROLLBACK,
+  balances restored back to 162,241.84 and 162,393.45. Count of transaction rows = 0.
+- Demo 3 (Failure): Transfer of 999,999,999.00 threw INSUFFICIENT_FUNDS error.
+  Balances were untouched.
+- Demo 4 (Idempotency): Calling transfer of 25.00 twice with the same key returned
+  the same UUID (bbdd9ba4-f042-4ac1-9d69-78e5e6b298d3). Exactly 1 transaction row
+  was inserted, and money was deducted only once.
+- Demo 5 (Savepoint): Transferred 10.00, hit an error on a second bad transfer,
+  rolled back to savepoint, and committed. Only the 10.00 went through.
+- Final Ledger Check: Verified matching DEBIT and CREDIT lines for all committed
+  transactions (10.00, 25.00, 100.00).
+
+
+4. SCREENSHOT INVENTORY - WHAT EACH PICTURE SHOWS
+---------------------------------------------------------------------
+- psql counts check.png & PGADMIN graphical counts check.png:
+  Base state check before testing. Shows 6,001 accounts, 206,101 transactions,
+  and 412,201 ledger entries in the database.
+
+- Test transfer function.png:
+  Verifying active account records and initial balances in pgAdmin 4.
+
+- commit rollback output .png:
+  Running the 03_commit_rollback_demo.sql script via psql in PowerShell and
+  piping output into 03_commit_rollback_output.txt.
+
+- 04_exp2_waiting.png:
+  Session 1 runs SELECT ... FOR UPDATE on Demo Alice (9000000001).
+  Session 2 tries to run an update on the same row and freezes (hangs),
+  waiting for Session 1 to release the lock.
+
+- exp2_unblocked.png:
+  Checking pg_stat_activity during the wait. It shows Session 2 in 'active' state
+  with wait_event_type = 'Lock' and wait_event = 'transactionid'. Once Session 1
+  does COMMIT/ROLLBACK, Session 2 unblocks immediately.
+
+- 06_exp3a_read_committed.png:
+  Read Committed isolation demo. Inside a transaction, updates committed by
+  another session become visible immediately upon subsequent SELECT statements.
+
+- 07_exp3b_repeatable_read.png:
+  Repeatable Read isolation demo. Session 1 is in Repeatable Read mode and reads
+  balance 500.00. Session 2 updates the balance and commits. When Session 1
+  tries to update the same row, PostgreSQL stops it with:
+  "ERROR: could not serialize access due to concurrent update".
+  This is snapshot isolation preventing lost updates.
+
+- 08_exp4_deadlock.png:
+  Deadlock demonstration. Session 1 locks Bob then asks for Alice. Session 2
+  locks Alice then asks for Bob. Both freeze waiting for each other.
+  PostgreSQL's deadlock detector steps in and terminates one with:
+  "ERROR: deadlock detected".
+
+- stress_results.png:
+  Terminal showing pgbench stress testing commands running 10 concurrent clients
+  and 4 worker threads.
+
+- integrity.png:
+  Running 07_integrity_check.sql directly against the database to audit ledger lines.
+
+- own_experiment.png 1.png:
+  Testing reverse_transfer(). Reversal of transfer e441be5a... succeeds and returns
+  UUID dcb7336d... Calling it again with the same key returns the exact same UUID.
+
+- own_experiment.png 2.png:
+  Trying to reverse the same transaction again with a new key gets blocked:
+  "ERROR: NOT_REVERSIBLE: only a SUCCESS transfer can be reversed (status is REVERSED)".
+  Also shows sender received their money back and receiver was debited.
+
+- own_experiment.png 3.png:
+  Verifying transaction records: original shows status REVERSED, reversal shows
+  status SUCCESS with reversal_of pointing to original. Debit minus credit sums
+  for both transactions equal 0.00.
+
+- own_experiment.png 4.png:
+  Running 07_integrity_check.sql after the reversal:
+  Total money in system is still 10,000,000,000.00.
+  Unbalanced transactions = 0.
+  Mismatched accounts = 0.
+  Stuck pending transactions = 0.
+  Perfect clean audit!
+
+
+5. QUICK EXPLANATIONS OF HARD CONCEPTS (IN PLAIN WORDS)
+---------------------------------------------------------------------
+- ACID:
+  * Atomicity: All or nothing. If anything fails, the whole transfer cancels.
+  * Consistency: Rules are never broken (no negative balances, total money stays same).
+  * Isolation: Concurrent transfers don't mess up each other's view of data.
+  * Durability: Once committed, a power cut won't wipe the transaction out.
+
+- Ordered Locking:
+  If Alice sends to Bob, and Bob sends to Alice at the same time:
+  Without ordering: Alice locks Alice then waits for Bob; Bob locks Bob then waits for Alice. Deadlock!
+  With ordering: Both transfers MUST lock the lower ID first, then the higher ID.
+  One gets the first lock, the other waits politely. No cycle, no deadlock!
+
+- Idempotency:
+  Giving every payment a unique key. If your internet stutters and the app retries,
+  the database recognizes the key and says "I already did this, here is your receipt",
+  instead of charging you twice.
+
+- Savepoints:
+  Like checkpoints in a video game. If a mini-step fails, you can jump back to the
+  checkpoint without losing everything you did since starting the level.
+
+- Append-Only Ledger:
+  In banking, you NEVER use "DELETE FROM transactions" or "UPDATE balance" to fix
+  a mistake. You post a new reversal entry. That way an auditor can trace every
+  single cent from day one.
+=====================================================================
+
