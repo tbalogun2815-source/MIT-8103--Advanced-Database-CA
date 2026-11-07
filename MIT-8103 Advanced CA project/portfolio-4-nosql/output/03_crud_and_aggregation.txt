@@ -1,0 +1,120 @@
+############ CRUD ############
+
+--- CREATE: onboard a new customer with a passport (nested fields)
+{
+  customer_id: '99999999-9999-9999-9999-999999999999',
+  tier: 2,
+  status: 'PENDING',
+  documents: [
+    {
+      type: 'BVN',
+      number: '22212345678',
+      verified_with: 'NIBSS'
+    },
+    {
+      type: 'PASSPORT',
+      number: 'A12345678',
+      country: 'NG',
+      expiry: ISODate('2031-05-01T00:00:00.000Z')
+    }
+  ],
+  created_at: ISODate('2026-11-07T05:43:43.837Z')
+}
+
+--- READ: tier 3 customers who hold a PASSPORT (query inside an array)
+count = 316
+
+--- READ: passports expiring in the next 365 days (nested field filter)
+count = 21
+
+--- READ: last 3 audit events for customer 00038243-21c7-41f4-bc96-8a9404e841c9 (newest first)
+{
+  customer_id: '00038243-21c7-41f4-bc96-8a9404e841c9',
+  event_type: 'FRAUD_FLAG',
+  ts: ISODate('2026-10-27T12:42:26.557Z'),
+  details: {
+    rule: 'VELOCITY',
+    score: 76
+  }
+}
+{
+  customer_id: '00038243-21c7-41f4-bc96-8a9404e841c9',
+  event_type: 'LOGIN_FAILED',
+  ts: ISODate('2026-10-20T20:07:08.452Z'),
+  details: {
+    ip: '41.58.85.84',
+    reason: 'ACCOUNT_LOCKED'
+  }
+}
+{
+  customer_id: '00038243-21c7-41f4-bc96-8a9404e841c9',
+  event_type: 'TRANSFER_INITIATED',
+  ts: ISODate('2026-10-15T17:22:57.304Z'),
+  details: {
+    reference: 'ref-2149282946',
+    amount: Decimal128('3371.05'),
+    channel: 'USSD'
+  }
+}
+
+--- UPDATE: verify the customer and upgrade to tier 3 ($set) and add a document ($push)
+status=VERIFIED, tier=3, documents=3
+
+--- UPDATE: record the change in the audit log (append-only: we insert, never edit)
+
+--- DELETE: remove the demo customer profile
+deleted = 1
+
+############ AGGREGATION ############
+
+--- Aggregation 1: events per type in the last 30 days
+  LOGIN_SUCCESS: 13423
+  TRANSFER_INITIATED: 9990
+  LOGIN_FAILED: 4910
+  KYC_UPGRADED: 1688
+  FRAUD_FLAG: 1663
+  PIN_CHANGED: 1620
+
+--- Aggregation 2: total TRANSFER_INITIATED amount per day (latest 5 days)
+  2026-11-07  transfers=75  total=182217.89
+  2026-11-06  transfers=319  total=765530.31
+  2026-11-05  transfers=322  total=817420.28
+  2026-11-04  transfers=334  total=808428.54
+  2026-11-03  transfers=330  total=839178.56
+
+--- Aggregation 3: top 5 customers by failed logins, with their KYC tier ($lookup = a JOIN)
+{
+  failed_logins: 12,
+  customer_id: 'f34dd8cb-e00e-4274-a4f1-7f35a576906b',
+  tier: 1,
+  status: 'VERIFIED'
+}
+{
+  failed_logins: 11,
+  customer_id: '272fbb8c-b18b-41fc-82e2-114dc558a7f3',
+  tier: 2,
+  status: 'VERIFIED'
+}
+{
+  failed_logins: 11,
+  customer_id: '4817dd24-8d8d-4c03-a46b-7f41e7cdc850',
+  tier: 2,
+  status: 'VERIFIED'
+}
+{
+  failed_logins: 10,
+  customer_id: '8de9c065-c254-403c-b6be-bc26e369ed1d',
+  tier: 1,
+  status: 'REJECTED'
+}
+{
+  failed_logins: 10,
+  customer_id: 'c99a40d0-e543-424f-aef3-3aa38b6266a8',
+  tier: 1,
+  status: 'PENDING'
+}
+
+--- Aggregation 4: average number of documents per KYC tier ($size)
+  tier 1: customers=2741, avg documents=1
+  tier 2: customers=1660, avg documents=2
+  tier 3: customers=599, avg documents=4
