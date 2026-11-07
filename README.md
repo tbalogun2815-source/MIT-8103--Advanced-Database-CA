@@ -10,7 +10,8 @@ This repository contains the complete coursework and continuous assessment imple
   - Performance audit, indexing strategy, query plans (EXPLAIN ANALYZE), planner selectivity, and write-tax benchmark.
 - [Portfolio 3: Transactions, Concurrency & ACID Guarantees](MIT-8103 Advanced CA project/portfolio-3-transactions-concurrency/README.md)
   - Atomic double-entry money transfers, canonical ordered locking, isolation level experiments, deadlock detection, pgbench stress benchmarks, integrity verification, and safe reversals.
-- **Portfolio 4: NoSQL Document Storage (MongoDB)**
+- [Portfolio 4: NoSQL Document Storage (MongoDB)](MIT-8103 Advanced CA project/portfolio-4-nosql/README.md)
+  - Polyglot persistence, JSON Schema validation, embedded KYC profiles, 100k audit events stream, compound and TTL indexes, aggregation pipelines, and partial index optimization.
 - **Portfolio 5: Distributed & Cloud Databases**
 
 ## Directory Tree
@@ -48,6 +49,16 @@ MIT-8103--Advanced-Database-CA/
     │   ├── analysis.md
     │   └── reflection.md
     ├── portfolio-4-nosql/
+    │   ├── 00_export_customer_ids.sql
+    │   ├── 01_schema_validation.js
+    │   ├── 02_seed_data.js
+    │   ├── 03_crud_and_aggregation.js
+    │   ├── 04_indexes_explain.js
+    │   ├── 05_own_partial_index.js
+    │   ├── customer_ids.js
+    │   ├── output/
+    │   ├── screenshots/
+    │   └── README.md
     └── portfolio-5-distributed-cloud/
 ```
 
