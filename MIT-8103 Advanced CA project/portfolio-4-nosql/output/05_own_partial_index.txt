@@ -1,0 +1,29 @@
+idx_audit_fraud_partial
+
+############ FRAUD_FLAG query: full index vs partial index ############
+  [full index idx_audit_type_ts]
+    plan stages        : FETCH > IXSCAN
+    documents examined : 367
+    index keys examined: 367
+    documents returned : 367
+    execution time (ms): 14
+  [partial index idx_audit_fraud_partial]
+    plan stages        : FETCH > IXSCAN
+    documents examined : 367
+    index keys examined: 367
+    documents returned : 367
+    execution time (ms): 1
+
+############ LOGIN_FAILED query: the partial index cannot be used ############
+  [planner choice (no hint)]
+    plan stages        : FETCH > IXSCAN
+    documents examined : 1156
+    index keys examined: 1156
+    documents returned : 1156
+    execution time (ms): 8
+
+############ Index sizes (KB) ############
+  _id_: 3308 KB
+  idx_audit_customer_ts: 1400 KB
+  idx_audit_type_ts: 1112 KB
+  idx_audit_fraud_partial: 72 KB
