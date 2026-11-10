@@ -1,0 +1,27 @@
+=== Is this server a replica? (expected: f = primary)
+ is_replica 
+------------
+ f
+(1 row)
+
+
+=== Connected replicas (one row per streaming standby)
+ application_name | client_addr |   state   | sync_state | sent_lsn  | replay_lsn | replay_lag 
+------------------+-------------+-----------+------------+-----------+------------+------------
+ walreceiver      | 172.18.0.3  | streaming | async      | 0/DB458F0 | 0/DB458F0  | 
+(1 row)
+
+
+=== Replication slots (the primary keeps WAL until the replica has it)
+   slot_name   | slot_type | active | restart_lsn 
+---------------+-----------+--------+-------------
+ replica1_slot | physical  | t      | 0/DB458F0
+(1 row)
+
+
+=== Current WAL position on the primary
+ primary_wal_position 
+----------------------
+ 0/DB458F0
+(1 row)
+

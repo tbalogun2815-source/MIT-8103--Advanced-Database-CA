@@ -1,0 +1,30 @@
+=== Is this server a replica? (expected: t)
+ is_replica 
+------------
+ t
+(1 row)
+
+
+=== WAL receiver: the live connection to the primary
+  status   | sender_host | sender_port |   slot_name   
+-----------+-------------+-------------+---------------
+ streaming | primary     |        5432 | replica1_slot
+(1 row)
+
+
+=== How far behind is this replica?
+ received_up_to | replayed_up_to | last_replayed_commit_time  | time_since_last_replayed_commit 
+----------------+----------------+----------------------------+---------------------------------
+ 0/DB458F0      | 0/DB458F0      | 2026-11-10 11:56:51.449+00 | 00:44:13.776902
+(1 row)
+
+
+=== A read works on the replica
+ accounts 
+----------
+     6003
+(1 row)
+
+
+=== A write is refused on the replica (expected: ERROR)
+psql:portfolio-5-distributed-cloud/02_replica_checks.sql:25: ERROR:  cannot execute UPDATE in a read-only transaction

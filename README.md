@@ -25,7 +25,6 @@ MIT-8103--Advanced-Database-CA/
     │   ├── create_tables.sql
     │   ├── constraint_tests.sql
     │   ├── normalisation.md
-    │   ├── normalization.md
     │   ├── seed_data.sql
     │   ├── screenshots/
     │   └── README.md
