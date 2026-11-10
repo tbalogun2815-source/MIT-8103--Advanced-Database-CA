@@ -1,0 +1,72 @@
+=== Rebuilding the partitioned copy of ledger_entries
+DROP TABLE
+psql:portfolio-5-distributed-cloud/03_partitioning.sql:7: NOTICE:  table "ledger_entries_sharded" does not exist, skipping
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+INSERT 0 412217
+ANALYZE
+
+=== Rows per partition (hash spreads accounts roughly evenly)
+   partition    |  rows  
+----------------+--------
+ ledger_shard_0 | 111749
+ ledger_shard_1 |  99844
+ ledger_shard_2 |  99123
+ ledger_shard_3 | 101501
+(4 rows)
+
+
+=== Same total as the original table? (expected: both numbers equal)
+ original_rows | partitioned_rows 
+---------------+------------------
+        412217 |           412217
+(1 row)
+
+
+=== Query WITH the partition key: only ONE partition is scanned (partition pruning)
+                                         QUERY PLAN                                          
+---------------------------------------------------------------------------------------------
+ Limit
+   ->  Sort
+         Sort Key: ledger_entries_sharded.created_at DESC
+         ->  Bitmap Heap Scan on ledger_shard_0 ledger_entries_sharded
+               Recheck Cond: (account_id = '3126471d-5894-4cfd-8bf5-80ffaa2af001'::uuid)
+               ->  Bitmap Index Scan on ledger_shard_0_pkey
+                     Index Cond: (account_id = '3126471d-5894-4cfd-8bf5-80ffaa2af001'::uuid)
+(7 rows)
+
+
+=== Query WITHOUT the partition key: ALL four partitions are scanned
+                                      QUERY PLAN                                       
+---------------------------------------------------------------------------------------
+ Gather
+   Workers Planned: 2
+   ->  Parallel Append
+         ->  Parallel Seq Scan on ledger_shard_0 ledger_entries_sharded_1
+               Filter: (transaction_id = '00000000-0000-0000-0000-000000000003'::uuid)
+         ->  Parallel Seq Scan on ledger_shard_3 ledger_entries_sharded_4
+               Filter: (transaction_id = '00000000-0000-0000-0000-000000000003'::uuid)
+         ->  Parallel Seq Scan on ledger_shard_1 ledger_entries_sharded_2
+               Filter: (transaction_id = '00000000-0000-0000-0000-000000000003'::uuid)
+         ->  Parallel Seq Scan on ledger_shard_2 ledger_entries_sharded_3
+               Filter: (transaction_id = '00000000-0000-0000-0000-000000000003'::uuid)
+(11 rows)
+
+
+=== One transfer = two ledger lines. Which shard holds each line?
+   partition    | entry_direction |              account_id              
+----------------+-----------------+--------------------------------------
+ ledger_shard_0 | CREDIT          | 00000000-0000-0000-0000-000000000002
+(1 row)
+
+
+=== How many transactions touch 1 shard vs 2 shards? (2 = a cross-shard transfer)
+ shards_touched | transactions 
+----------------+--------------
+              1 |        51269
+              2 |       154840
+(2 rows)
+
