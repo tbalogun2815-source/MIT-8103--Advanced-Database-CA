@@ -1,0 +1,5 @@
+=== Write concern cost, 100 sequential inserts each
+w:1 (primary only): 100 inserts in 22252 ms (222.5 ms each)
+w:majority (2 of 3 nodes): 100 inserts in 22741 ms (227.4 ms each)
+w:1 again (to check for noise): 100 inserts in 21790 ms (217.9 ms each)
+Cleaned up.
