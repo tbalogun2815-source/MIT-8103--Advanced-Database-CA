@@ -1,0 +1,17 @@
+=== 1. Topology: what did I connect to?
+replica set name : atlas-5uum6d-shard-0
+members          : ac-u5vzxxk-shard-00-00.z21r9ec.mongodb.net:27017, ac-u5vzxxk-shard-00-01.z21r9ec.mongodb.net:27017, ac-u5vzxxk-shard-00-02.z21r9ec.mongodb.net:27017
+primary          : ac-u5vzxxk-shard-00-02.z21r9ec.mongodb.net:27017
+served by        : ac-u5vzxxk-shard-00-02.z21r9ec.mongodb.net:27017  (this is the PRIMARY)
+
+=== 2. Write concern: wait until a MAJORITY of nodes have the write
+acknowledged     : true (took 253 ms)
+
+=== 3. Read preference: read from a SECONDARY instead of the primary
+this read was served by : ac-u5vzxxk-shard-00-00.z21r9ec.mongodb.net  (a SECONDARY)
+kyc_profiles visible on that node : 5000
+
+=== 4. Read concern: only return data that is acknowledged by a majority
+majority read returned 1 document(s)
+
+Cleaned up the p5_marker collection.
