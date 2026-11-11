@@ -10,7 +10,7 @@
 
 ## 1. Introduction & Context
 
-When I began this continuous assessment module, I viewed database transactions primarily as an administrative wrapper: you type `BEGIN`, you execute some `UPDATE` statements, and you type `COMMIT`. If an error occurs, you run `ROLLBACK`. On paper, the ACID acronym (Atomicity, Consistency, Isolation, Durability) felt like a straightforward textbook checklist that relational database engines magically handled under the hood.
+When I began this continuous assessment module, I viewed database transactions primarily as an administrative wrapper: typed `BEGIN`, Eexecuted some `UPDATE` statements, typed `COMMIT`. If an error occurs, I'll run `ROLLBACK`. On paper, the ACID acronym (Atomicity, Consistency, Isolation, Durability) felt like a straightforward textbook checklist that relational database engines would handle it.
 
 Working through **Portfolio 3** on the **QuickFund** financial platform completely dismantled that simplistic assumption. Once high concurrency enters the picture—multiple users transferring funds between overlapping accounts at the exact same millisecond—the database engine ceases to be a passive storage layer and becomes a complex distributed synchronization engine. 
 
@@ -45,7 +45,9 @@ By enforcing a simple mathematical rule that *every* transaction must lock accou
 Before this assessment, I assumed that setting `REPEATABLE READ` was always strictly superior to `READ COMMITTED`. Experiment 3 proved how nuanced that choice actually is:
 
 1. In **Read Committed**, each query gets a new snapshot. When Session 2 updated and committed an account balance, Session 1's subsequent `SELECT` within the same transaction immediately saw the new balance. This demonstrated a classic non-repeatable read. However, `READ COMMITTED` rarely aborts transactions outright; it simply blocks and proceeds once locks release.
-2. In **Repeatable Read**, Session 1 maintained an immutable snapshot of the balance as it existed when the transaction started. But when Session 1 subsequently attempted to update that row after Session 2 had committed a change, PostgreSQL immediately threw:
+2. In **Repeatable Read**, Session 1 maintained an immutable snapshot of the balance as it existed when the transaction started.
+
+ But when Session 1 subsequently attempted to update that row after Session 2 had committed a change, PostgreSQL immediately threw:
    ```text
    ERROR: could not serialize access due to concurrent update
    ```
@@ -89,7 +91,8 @@ Building `reverse_transfer()` reinforced the fundamental accounting rule of **im
 * To undo a transfer, you do not erase history; you append a new `REVERSAL` transaction with mirror debit and credit lines.
 
 Designing this function forced me to consider several real-world edge cases:
-1. **Double-Reversal Attacks**: What happens if an operator clicks "Reverse" twice? I locked the original transaction row with `FOR UPDATE` and validated that its status was strictly `'SUCCESS'`. Once reversed, its status transitioned to `'REVERSED'`, making subsequent reversal attempts fail immediately with `NOT_REVERSIBLE`.
+1. **Double-Reversal Attacks**: What happens if an operator clicks "Reverse" twice?
+ I locked the original transaction row with `FOR UPDATE` and validated that its status was strictly `'SUCCESS'`. Once reversed, its status transitioned to `'REVERSED'`, making subsequent reversal attempts fail immediately with `NOT_REVERSIBLE`.
 2. **Receiver Solvency**: What if the recipient of the original payment has already withdrawn or spent the money? A naive reversal would cause an unauthorized overdraft. My function inspects the receiver's current balance *after* acquiring row locks, aborting with `INSUFFICIENT_FUNDS` if the receiver cannot cover the reversal.
 3. **Audit Trail Linkage**: By storing `reversal_of` foreign keys, every reversal explicitly points back to its originating transfer, providing an unbroken audit trail for compliance officers.
 
@@ -110,4 +113,3 @@ Reflecting on the finished portfolio, there are two enhancements I would explore
 Portfolio 3 has been the most technically challenging and illuminating segment of this course so far. It moved me beyond writing declarative SQL queries and challenged me to think like a systems architect. 
 
 I now deeply understand that maintaining data integrity is not an accidental property of relational databases—it is the result of deliberate architectural choices: canonical lock hierarchies, atomic transaction boundaries, strict idempotency keys, and immutable double-entry ledgers. These principles form the bedrock of trustworthy financial software, and the skills I have developed here will directly inform my future work in distributed systems and backend engineering.
-
