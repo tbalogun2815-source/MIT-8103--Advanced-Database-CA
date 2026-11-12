@@ -4,7 +4,7 @@
 > **Student Name:** Balogun Toluwalase  
 > **Student ID:** 301872815  
 > **Institution:** Miva Open University  
-> **Project:** QuickFund Digital Wallet & Financial Ledger System  
+> **Project:** QuickFund  
 > **Submission Date:** November 2026  
 
 ---

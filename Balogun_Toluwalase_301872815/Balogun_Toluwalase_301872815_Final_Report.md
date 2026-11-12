@@ -8,7 +8,7 @@
 > **Degree Program:** Master of Information Technology (MIT)
 > **Institution:** Miva Open University
 > **Submission Date:** November 12, 2026
-> **Repository:** [`https://github.com/tbalogun2815-source/MIT-8103--Advanced-Database-CA`](https://github.com/tbalogun2815-source/MIT-8103--Advanced-Database-CA)
+> **Repository:** https://github.com/tbalogun2815-source/MIT-8103--Advanced-Database-CA.git
 
 ---
 

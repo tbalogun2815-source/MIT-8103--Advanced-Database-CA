@@ -5,7 +5,7 @@
 **Course:** MIT 8103 Advanced Database Systems  
 **Institution:** Miva Open University  
 **Case Study:** QuickFund Digital Wallet & Financial Ledger System  
-**GitHub Repository:** [https://github.com/tbalogun2815-source/MIT-8103--Advanced-Database-CA.git](https://github.com/tbalogun2815-source/MIT-8103--Advanced-Database-CA.git)  
+**GitHub Repository:** https://github.com/tbalogun2815-source/MIT-8103--Advanced-Database-CA.git 
 
 ---
 
