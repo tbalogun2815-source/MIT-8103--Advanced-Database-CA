@@ -9,101 +9,100 @@
 
 ---
 
-In this coursework we built QuickFund (a digital wallet and financial ledger system) and applied database concepts to a real-world financial technology scenario. I went through five portfolios which covered different aspects of database development & management.
+[Note: In this coursework, I build QuickFund, a digital wallet & financial ledger application. Throughout the coursework, I have tackled 5 different portfolios.]
 
----
+## Portfolio 1: Database Design
 
-## Portfolio 1: Database Design and Modelling
+I designed the QuickFund database using PostgreSQL. I identified key entities, and set up 8 relational tables using principles of normalisation & constraints to ensure accurate data. I wrote a script to generate thousands of sample entries and ran tests on the database to ensure adherence to 15 conditions (all passed).
 
-I designed the QuickFund database in PostgreSQL first. I identified main entities, created eight relational tables, applied normalisation principles and constraints to ensure data accuracy; wrote a script to generate thousands of sample records and tested the database against 15 conditions (all passed).
+Key Evidence:
 
-### Key Evidence & Architecture
-- **Entity-Relationship Diagram (ERD):** Demonstrating the 8 core relational entities (`customers`, `kyc_records`, `accounts`, `beneficiaries`, `cards`, `transactions`, `ledger_entries`, `fraud_flags`) and double-entry ledger cardinalities.
-  
-  ![QuickFund ER Diagram](Balogun_Toluwalase_301872815/portfolio-1-database-design/screenshots/ER%20diagram.png)
+- ER Diagram showing the 8 main relational entities within the database (`customers`, `kyc_records`, `accounts`, `beneficiaries`, `cards`, `transactions`, `ledger_entries`, `fraud_flags`). Also shows double entry ledger cardinalities.
 
-- **15 Automated Constraint Tests (15/15 PASS):** Proving non-negative balances (`balance >= 0.00`), 10-digit NUBAN formatting, PCI-DSS card masking, and single-reversal invariants at the PostgreSQL storage engine level.
-  
-  ![Constraint Tests Passing](Balogun_Toluwalase_301872815/portfolio-1-database-design/screenshots/scrnsht%20pg%20constraint%20test.png)
+![QuickFund ER Diagram](Balogun_Toluwalase_301872815/portfolio-1-database-design/screenshots/ER%20diagram.png)
 
----
+- 15 Constraint tests, all passed (15/15 PASS). Showed that balance will always be greater than or equal to zero (`balance >= 0.00`), NUBAN numbers will always be 10 digits, PCI-DSS card masking & ensuring that only one reversal occurs.
 
-## Portfolio 2: Query Optimisation and Performance Tuning
+![Constraint tests passed](Balogun_Toluwalase_301872815/portfolio-1-database-design/screenshots/scrnsht%20pg%20constraint%20test.png)
 
-For this portfolio I wanted to see how database queries behave and what can be done to improve them. I wrote 11 SQL queries, EXPLAIN ANALYZE’d them (to see execution plans), created seven indexes and compared the results before and after optimisation (so I could see how indexing affects query speed and database resources). One example was that account statement query went from 22.80 ms to 1.51 ms by indexing it.
+## Portfolio 2: Query Optimisation
 
-### Key Evidence & Performance Tuning
-- **Execution Plan Analysis (Q1 Account Statement):** Transitioning from unindexed sequential table scans with 24,294 buffer page hits down to an index scan with 413 buffer hits(**102.8× speedup**, **98.3% I/O reduction**).
-  
-  ![Query 1 Execution Plan Before Optimisation](Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/screenshots/Balogun_Toluwalase_301872815_portfolio-2-query-optimisation%20screenshots%2003_Q1_before_plan.png)
+For this portfolio I wanted to understand how queries work within the database and how to optimise them. I wrote 11 SQL queries and ran EXPLAIN ANALYZE on them to understand how they operate. I then created 7 indexes and compared the results to understand how the indexes affect the speed of queries & database. For example, the account statement query speed improved from 22.80ms to 1.51ms by creating an index.
 
-- **Targeted B-Tree Index Migration:** Successful creation of 7 composite and covering indexes with `INCLUDE` clauses, eliminating up to 6.9 MB external merge disk spills on analytical sort queries.
-  
-  ![Index Creation](Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/screenshots/Balogun_Toluwalase_301872815_index%20creation%20.png)
+Key Evidence:
 
----
+- Q1 Account Statement Query Plan. Showing how the speed was improved using indexes. From sequential scans on tables with 24,294 buffer hits, to index scans with 413 buffer hits (102.8x improvement, 98.3% less I/O).
 
-## Portfolio 3: Transactions and Concurrency
+![Q1 Query Plan Before Optimisation](Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/screenshots/Balogun_Toluwalase_301872815_portfolio-2-query-optimisation%20screenshots%2003_Q1_before_plan.png)
 
-In this section I looked at how to do financial transactions without breaking data integrity (multiple operations can happen at the same time) transaction controls, row level locking and idempotency checks; tested isolation levels; showed how inconsistent locking can cause deadlocks. Final integrity checks showed no unbalanced transactions and that system had ₦10 billion balance.
+- B-tree Indexes. Successfully created 7 indexes (composite & covering indexes created with the `INCLUDE` clause), to reduce the external merge spillage to up to 6.9MB.
 
-### Key Evidence & Concurrency Controls
-- **Deadlock Detection under Unordered Locking:** Demonstrating how arbitrary row lock acquisition order causes mutual circular wait dependencies, prompting PostgreSQL's deadlock detector to terminate process 35752. This was resolved with canonical `LEAST`/`GREATEST` lock ordering.
-  
-  ![Deadlock Detection Error](Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/screenshots/Balogun_Toluwalase_301872815_08_exp4_deadlock.png)
+![Indexes Created](Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/screenshots/Balogun_Toluwalase_301872815_index%20creation%20.png)
 
-- **System-Wide Solvency & Integrity Audit:** Automated verification after concurrent stress testing (10 clients, 2,000 transactions across 20 hot accounts) confirming zero unbalanced transactions and 100% mathematical balance preservation at ₦10,000,000,000.00.
-  
-  ![Integrity Audit Results](Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/screenshots/Balogun_Toluwalase_301872815_integrity.png)
+## Portfolio 3: Transactions & Concurrency
 
----
+Here I have looked at how to handle transactions for financial transactions (without causing issues with data integrity). Transaction control, row level locks & idempotent checks. I ran tests on the isolation levels and demonstrated how inconsistencies can occur with locking leading to deadlocks. Finally I ran integrity tests and found there were no unbalanced transactions and there was a ₦10 Billion balance.
 
-## Portfolio 4: NoSQL and Advanced Data Models
+Key Evidence:
 
-I introduced MongoDB as a complement to PostgreSQL — each database had its own type of information (PostgreSQL was used for core financial records, MongoDB KYC profiles and audit events). Document validation, CRUD operations, aggregation pipelines etc. were all part of what I did with document manipulation in MongoDB. One experiment I ran was to create a partial index which required 93.5% less storage than the full index.
+- Deadlock Detection. Demonstrated how deadlock can occur with random locking. This caused PostgreSQL Deadlock Detection to kill process 35752. This was solved by applying canonical locking using the `LEAST` & `GREATEST` functions.
 
-### Key Evidence & Document Modeling
-- **Strict JSON Schema Validation:** Enforcing structural rules, UUID format, and enum statuses at the MongoDB engine level with immediate rejection (`DocumentValidationFailure`, code 121) of invalid records.
-  
-  ![Schema Validation Error Code 121](Balogun_Toluwalase_301872815/portfolio-4-nosql/screenshots/Balogun_Toluwalase_301872815_01_schema_validation.png)
+![Deadlock Detection Error](Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/screenshots/Balogun_Toluwalase_301872815_08_exp4_deadlock.png)
 
-- **Partial Index Optimization:** A partial index on `FRAUD_FLAG` events consuming only 72 KB compared to 1,112 KB for the full index (**93.5% storage reduction**) while achieving 1 ms query response times.
-  
-  ![Partial Index 93.5% Space Reduction](Balogun_Toluwalase_301872815/portfolio-4-nosql/screenshots/Balogun_Toluwalase_301872815_11_own_work.png)
+- Solvency & Integrity Check. After running tests involving concurrent activity (10 clients & 2000 transactions to 20 hot accounts). Verified that there were 0 unbalanced transactions. The system has a perfect 100% balance of ₦10,000,000,000.00.
 
----
+![Integrity](Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/screenshots/Balogun_Toluwalase_301872815_integrity.png)
 
-## Portfolio 5: Distributed and Cloud Databases
+## Portfolio 4: NoSQL & Advanced Data Modelling
 
-For the final portfolio I set up PostgreSQL streaming replication with Docker and tested how databases behave on multiple nodes (replication delays, failover, partitioning, consistency etc.). I also deployed a three node MongoDB Atlas replica set and compared write concern settings to see how performance changes with different write concern settings.
+I used MongoDB to compliment PostgreSQL. Each database holds different information (PostgreSQL for financial data, MongoDB for KYC profiles & audit events). I performed several tasks with the document modelling including document validation, CRUD functions & aggregation pipelines. I also performed some experimentation with creating a partial index which reduced the index size by 93.5%.
 
-### Key Evidence & Distributed Systems
-- **Asynchronous Replication Stale-Read Hazard:** Demonstrating replication lag when standby WAL replay is paused (`caught_up = false`, `sent_lsn 0/DB73268` vs `replay_lsn 0/DB73160`), visually proving why financial post-transfer reads must not be routed to un-replicated replicas.
-  
-  ![Stale Read Replication Lag](Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/screenshots/05_stale_read.png)
+Key Evidence:
 
-- **MongoDB Atlas Cloud Write Concern Benchmark:** Comparing `w: 1` (222.5 ms) against `w: majority` (227.4 ms) across 100 sequential inserts to AWS Paris (`eu-west-3`), proving that wide-area network latency completely dominates over local datacenter quorum consensus overhead.
-  
-  ![Write Concern Benchmark Output](Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/screenshots/13_own_work.png)
+- Enforced Validation. Used JSON Schema Validation which enforces structure, UUID format & enum status. Invalid documents were rejected immediately with error code 121 (DocumentValidationFailure).
 
----
+![Schema Validation Error (121)](Balogun_Toluwalase_301872815/portfolio-4-nosql/screenshots/Balogun_Toluwalase_301872815_01_schema_validation.png)
+
+- Partial Index. Created a partial index on FRAUD_FLAG events which reduced the index size to just 72KB compared to 1,112KB (93.5% reduction in space). With 1ms query speeds.
+
+![Partial Index (93.5% Reduced)](Balogun_Toluwalase_301872815/portfolio-4-nosql/screenshots/Balogun_Toluwalase_301872815_11_own_work.png)
+
+## Portfolio 5: Distributed & Cloud Databases
+
+For the final portfolio I set up Streaming Replication using PostgreSQL & Docker. I tested how the databases work on multiple nodes (replication lag, failover, partitioning & consistency). I also set up a 3 node MongoDB Atlas replica set and tested how write concerns affect performance.
+
+Key Evidence:
+
+- Asynchronous Replication. Demonstrated replication lag by stopping WAL (Write Ahead Logging) replay on the standby. This resulted in `caught_up = false`. `sent_lsn 0/DB73268` vs `replay_lsn 0/DB73160`. This shows why reads after transactions shouldn’t be performed on un-replicated replicas.
+
+![Asynchronous Replication Lag](Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/screenshots/05_stale_read.png)
+
+- MongoDB Atlas Write Concern. Compared `w: 1` to `w: majority`. When inserting 100 sequential insertions to AWS Paris (`eu-west-3`). `w: 1` took 222.5ms, `w: majority` took 227.4ms. This proves that latency between wide area networks completely overrides any quorum consensus overheads with local datacentres.
+
+![Write Concern Output](Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/screenshots/13_own_work.png)
 
 ## Final Submission
 
-The final coursework is made up of the five portfolios (implementation scripts, technical explanations, test results and screenshots of experiments), executive engineering report, academic AI assistance declaration and bibliography (20 references).
+The final coursework consists of 5 portfolios containing the implementation scripts, technical explanations, results & screenshots from experiments. The coursework also contains an Executive Engineering Report, AI Use Declaration & Bibliography containing 20 references.
 
-All submission materials are organized inside the submission directory: [`Balogun_Toluwalase_301872815/`](Balogun_Toluwalase_301872815/):
-- **Executive Engineering Report:** [`Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_Final_Report.md`](Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_Final_Report.md)
-- **Academic AI Assistance Declaration:** [`Balogun_Toluwalase_301872815/Balogun_Toluwalase_AI_Use_Declaration.md`](Balogun_Toluwalase_301872815/Balogun_Toluwalase_AI_Use_Declaration.md)
-- **Academic References & Bibliography (20 References):** [`Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_References.md`](Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_References.md)
-- **Portfolio 1 (Database Design):** [`Balogun_Toluwalase_301872815/portfolio-1-database-design/`](Balogun_Toluwalase_301872815/portfolio-1-database-design/README.md)
-- **Portfolio 2 (Query Optimisation):** [`Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/`](Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/performance_analysis.md)
-- **Portfolio 3 (Transactions & Concurrency):** [`Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/`](Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/README.md)
-- **Portfolio 4 (NoSQL):** [`Balogun_Toluwalase_301872815/portfolio-4-nosql/`](Balogun_Toluwalase_301872815/portfolio-4-nosql/README.md)
-- **Portfolio 5 (Distributed & Cloud):** [`Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/`](Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/README.md)
+All resources are located within the submission folder: [Balogun_Toluwalase_301872815/](Balogun_Toluwalase_301872815/).
 
----
+- Executive Engineering Report: [Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_Final_Report.md](Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_Final_Report.md)
+
+- AI Use Declaration: [Balogun_Toluwalase_301872815/Balogun_Toluwalase_AI_Use_Declaration.md](Balogun_Toluwalase_301872815/Balogun_Toluwalase_AI_Use_Declaration.md)
+
+- Academic Reference & Bibliography (20 References): [Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_References.md](Balogun_Toluwalase_301872815/Balogun_Toluwalase_301872815_References.md)
+
+- Portfolio 1 - Database Design: [Balogun_Toluwalase_301872815/portfolio-1-database-design/](Balogun_Toluwalase_301872815/portfolio-1-database-design/README.md)
+
+- Portfolio 2 - Query Optimisation: [Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/](Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/performance_analysis.md)
+
+- Portfolio 3 - Transactions & Concurrency: [Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/](Balogun_Toluwalase_301872815/portfolio-3-transactions-concurrency/README.md)
+
+- Portfolio 4 - NoSQL: [Balogun_Toluwalase_301872815/portfolio-4-nosql/](Balogun_Toluwalase_301872815/portfolio-4-nosql/README.md)
+
+- Portfolio 5 - Distributed & Cloud: [Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/](Balogun_Toluwalase_301872815/portfolio-5-distributed-cloud/README.md)
 
 ## Overall Reflection
 
-Working on this project helped me understand how database concepts translate to real world applications. I could move away from writing SQL statements and actually see how database design, indexing, transaction controls and replication impact system performance and reliability. Some of the experiments also needed troubleshooting and adjustments before I got what I expected. Overall it gave me a more practical understanding of database engineering and considerations for building a reliable financial system.
+This project helped me gain a better understanding of how database concepts apply to real world applications. I was able to move away from just writing SQL statements and understand how designing databases, indexes, transactions & replication can impact performance & reliability. Some of the experiments required some troubleshooting & adjustments. Overall this has given me a more practical understanding of database engineering.
