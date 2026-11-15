@@ -4,7 +4,7 @@
 **Student ID:** 301872815  
 **Course:** MIT 8103 Advanced Database Systems  
 **Institution:** Miva Open University  
-**Case Study:** QuickFund Digital Wallet & Financial Ledger System  
+**Case Study:** QuickFund-Digital Wallet & Financial Ledger System  
 **GitHub Repository:** https://github.com/tbalogun2815-source/MIT-8103--Advanced-Database-CA.git 
 
 ---
@@ -33,7 +33,7 @@ I designed the QuickFund database in PostgreSQL first. I identified main entitie
 For this portfolio I wanted to see how database queries behave and what can be done to improve them. I wrote 11 SQL queries, EXPLAIN ANALYZE’d them (to see execution plans), created seven indexes and compared the results before and after optimisation (so I could see how indexing affects query speed and database resources). One example was that account statement query went from 22.80 ms to 1.51 ms by indexing it.
 
 ### Key Evidence & Performance Tuning
-- **Execution Plan Analysis (Q1 Account Statement):** Transitioning from unindexed sequential table scans with 24,294 buffer page hits down to an index scan with 413 buffer hits (**102.8× speedup**, **98.3% I/O reduction**).
+- **Execution Plan Analysis (Q1 Account Statement):** Transitioning from unindexed sequential table scans with 24,294 buffer page hits down to an index scan with 413 buffer hits(**102.8× speedup**, **98.3% I/O reduction**).
   
   ![Query 1 Execution Plan Before Optimisation](Balogun_Toluwalase_301872815/portfolio-2-query-optimisation/screenshots/Balogun_Toluwalase_301872815_portfolio-2-query-optimisation%20screenshots%2003_Q1_before_plan.png)
 
@@ -45,7 +45,7 @@ For this portfolio I wanted to see how database queries behave and what can be d
 
 ## Portfolio 3: Transactions and Concurrency
 
-In this section I looked at how to do financial transactions without breaking data integrity (multiple operations can happen at the same time) — transaction controls, row level locking and idempotency checks; tested isolation levels; showed how inconsistent locking can cause deadlocks. Final integrity checks showed no unbalanced transactions and that system had ₦10 billion balance.
+In this section I looked at how to do financial transactions without breaking data integrity (multiple operations can happen at the same time) transaction controls, row level locking and idempotency checks; tested isolation levels; showed how inconsistent locking can cause deadlocks. Final integrity checks showed no unbalanced transactions and that system had ₦10 billion balance.
 
 ### Key Evidence & Concurrency Controls
 - **Deadlock Detection under Unordered Locking:** Demonstrating how arbitrary row lock acquisition order causes mutual circular wait dependencies, prompting PostgreSQL's deadlock detector to terminate process 35752. This was resolved with canonical `LEAST`/`GREATEST` lock ordering.
